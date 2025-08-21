@@ -102,7 +102,7 @@ export default function Home() {
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8" data-testid="recent-articles-grid">
-              {recentPosts?.slice(0, 3).map((post: any) => (
+              {Array.isArray(recentPosts) ? recentPosts.slice(0, 3).map((post: any) => (
                 <article 
                   key={post.id} 
                   className="bg-white rounded-sm shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden card-hover"
@@ -142,7 +142,7 @@ export default function Home() {
                     </Link>
                   </div>
                 </article>
-              ))}
+              )) : null}
             </div>
           )}
           

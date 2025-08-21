@@ -53,12 +53,12 @@ export default function Chatbot() {
       // Send welcome message when chat opens for the first time
       sendMessage.mutate({
         sessionId,
-        message: "Olá! Como posso ajudá-lo hoje?",
-        sender: "bot"
+        message: "olá",
+        sender: "user"
       });
       setHasIntroduced(true);
     }
-  }, [isOpen, messages.length, hasIntroduced, sessionId]);
+  }, [isOpen, messages.length, hasIntroduced, sessionId, sendMessage]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

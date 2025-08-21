@@ -296,7 +296,7 @@ export default function Admin() {
                     </CardContent>
                   </Card>
                 ) : (
-                  Object.entries(chatSessions).map(([sessionId, messages]) => (
+                  Object.entries(chatSessions).map(([sessionId, messages]: [string, ChatMessage[]]) => (
                     <Card key={sessionId}>
                       <CardHeader>
                         <CardTitle className="text-lg flex items-center gap-2">
@@ -310,8 +310,8 @@ export default function Admin() {
                       <CardContent>
                         <div className="space-y-3 max-h-96 overflow-y-auto">
                           {messages
-                            .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
-                            .map((msg) => (
+                            .sort((a: ChatMessage, b: ChatMessage) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime())
+                            .map((msg: ChatMessage) => (
                               <div
                                 key={msg.id}
                                 className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
