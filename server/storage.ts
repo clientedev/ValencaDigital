@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type BlogPost, type InsertBlogPost, type BlogLike, type InsertBlogLike } from "@shared/schema";
+import { type User, type InsertUser, type BlogPost, type InsertBlogPost, type BlogLike, type InsertBlogLike, type ContactMessage, type InsertContactMessage, type ChatMessage, type InsertChatMessage } from "@shared/schema";
 import { randomUUID } from "crypto";
 
 export interface IStorage {
@@ -16,17 +16,30 @@ export interface IStorage {
   createBlogLike(like: InsertBlogLike): Promise<BlogLike>;
   deleteBlogLike(postId: string, sessionId: string): Promise<boolean>;
   getBlogLikeCount(postId: string): Promise<number>;
+
+  // Contact messages
+  getContactMessages(): Promise<ContactMessage[]>;
+  createContactMessage(message: InsertContactMessage): Promise<ContactMessage>;
+  updateContactMessageStatus(id: string, status: string): Promise<ContactMessage | undefined>;
+
+  // Chat messages
+  getChatMessages(sessionId?: string): Promise<ChatMessage[]>;
+  createChatMessage(message: InsertChatMessage): Promise<ChatMessage>;
 }
 
 export class MemStorage implements IStorage {
   private users: Map<string, User>;
   private blogPosts: Map<string, BlogPost>;
   private blogLikes: Map<string, BlogLike>;
+  private contactMessages: Map<string, ContactMessage>;
+  private chatMessages: Map<string, ChatMessage>;
 
   constructor() {
     this.users = new Map();
     this.blogPosts = new Map();
     this.blogLikes = new Map();
+    this.contactMessages = new Map();
+    this.chatMessages = new Map();
     
     // Initialize with some sample blog posts
     this.initializeSampleData();
@@ -163,6 +176,7 @@ export class MemStorage implements IStorage {
       id,
       likes: 0,
       imageUrl: insertPost.imageUrl || null,
+      published: insertPost.published ?? true,
       createdAt: now,
       updatedAt: now,
     };
@@ -231,6 +245,61 @@ export class MemStorage implements IStorage {
   async getBlogLikeCount(postId: string): Promise<number> {
     return Array.from(this.blogLikes.values())
       .filter(like => like.postId === postId).length;
+  }
+
+  // Contact Messages
+  async getContactMessages(): Promise<ContactMessage[]> {
+    return Array.from(this.contactMessages.values())
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  async createContactMessage(insertMessage: InsertContactMessage): Promise<ContactMessage> {
+    const id = randomUUID();
+    const message: ContactMessage = {
+      ...insertMessage,
+      id,
+      phone: insertMessage.phone || null,
+      status: "new",
+      createdAt: new Date(),
+    };
+    this.contactMessages.set(id, message);
+    return message;
+  }
+
+  async updateContactMessageStatus(id: string, status: string): Promise<ContactMessage | undefined> {
+    const message = this.contactMessages.get(id);
+    if (!message) return undefined;
+    
+    const updated = { ...message, status };
+    this.contactMessages.set(id, updated);
+    return updated;
+  }
+
+  // Chat Messages
+  async getChatMessages(sessionId?: string): Promise<ChatMessage[]> {
+    const messages = Array.from(this.chatMessages.values());
+    
+    if (sessionId) {
+      return messages
+        .filter(msg => msg.sessionId === sessionId)
+        .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+    }
+    
+    return messages.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+  }
+
+  async createChatMessage(insertMessage: InsertChatMessage): Promise<ChatMessage> {
+    const id = randomUUID();
+    const message: ChatMessage = {
+      ...insertMessage,
+      id,
+      name: insertMessage.name || null,
+      email: insertMessage.email || null,
+      phone: insertMessage.phone || null,
+      createdAt: new Date(),
+    };
+    this.chatMessages.set(id, message);
+    return message;
   }
 }
 

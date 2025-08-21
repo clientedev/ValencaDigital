@@ -4,7 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, MessageCircle, Clock } from "lucide-react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
+import { Mail, MessageCircle, Clock, Phone, MapPin } from "lucide-react";
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
@@ -14,7 +16,6 @@ export default function ContactSection() {
     area: "",
     message: ""
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const practiceAreas = [
@@ -30,150 +31,234 @@ export default function ContactSection() {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+  const queryClient = useQueryClient();
 
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+  const sendMessage = useMutation({
+    mutationFn: (data: typeof formData) => apiRequest("/api/contact", "POST", data),
+    onSuccess: () => {
+      toast({
+        title: "Mensagem enviada com sucesso!",
+        description: "Entraremos em contato em breve.",
       });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        toast({
-          title: "Mensagem enviada com sucesso!",
-          description: "Entraremos em contato em breve.",
-        });
-        setFormData({
-          name: "",
-          email: "",
-          phone: "",
-          area: "",
-          message: ""
-        });
-      } else {
-        throw new Error(result.error || "Erro ao enviar mensagem");
-      }
-    } catch (error) {
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        area: "",
+        message: ""
+      });
+      queryClient.invalidateQueries({ queryKey: ["/api/contact"] });
+    },
+    onError: () => {
       toast({
         title: "Erro ao enviar mensagem",
         description: "Tente novamente mais tarde.",
         variant: "destructive",
       });
-    } finally {
-      setIsSubmitting(false);
     }
+  });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    sendMessage.mutate(formData);
   };
 
   return (
-    <section id="contact" className="py-20 gradient-fas text-white" data-testid="contact-section">
+    <section id="contact" className="py-20 bg-white" data-testid="contact-section">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6" data-testid="contact-title">
-            Fale Conosco
+          <h2 className="text-3xl md:text-4xl font-bold text-fas-navy mb-6" data-testid="contact-title">
+            Entre em Contato
           </h2>
           <div className="w-24 h-1 bg-fas-accent mx-auto mb-8"></div>
-          <p className="text-xl text-blue-100">Entre em contato para uma consulta personalizada</p>
+          <p className="text-xl text-fas-text max-w-2xl mx-auto">
+            Fale conosco para esclarecer suas dúvidas jurídicas. Nossa equipe está pronta para ajudá-lo.
+          </p>
         </div>
-        
-        <div className="grid md:grid-cols-2 gap-12">
-          <div data-testid="contact-info">
-            <h3 className="text-2xl font-semibold mb-6">Informações de Contato</h3>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4" data-testid="contact-email-info">
-                <Mail className="text-accent-gold text-xl" size={24} />
-                <div>
-                  <div className="font-semibold">Email</div>
-                  <div className="text-blue-100">atendimento@valencaesoares.com.br</div>
+
+        <div className="grid lg:grid-cols-3 gap-12">
+          {/* Contact Info */}
+          <div className="lg:col-span-1">
+            <div className="bg-fas-light-gray p-8 rounded-sm h-full">
+              <h3 className="text-2xl font-semibold text-fas-navy mb-8">Informações de Contato</h3>
+              
+              <div className="space-y-8">
+                <div className="flex items-start gap-4" data-testid="contact-address">
+                  <div className="w-12 h-12 bg-fas-accent rounded-full flex items-center justify-center flex-shrink-0">
+                    <MapPin size={20} className="text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-fas-navy mb-2">Endereço</h4>
+                    <p className="text-fas-text">
+                      Rua da Consolação, 3.357<br />
+                      Consolação, São Paulo - SP<br />
+                      CEP: 01416-001
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4" data-testid="contact-phone">
+                  <div className="w-12 h-12 bg-fas-accent rounded-full flex items-center justify-center flex-shrink-0">
+                    <Phone size={20} className="text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-fas-navy mb-2">Telefone</h4>
+                    <p className="text-fas-text">
+                      (11) 3456-7890<br />
+                      (11) 98765-4321
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4" data-testid="contact-email">
+                  <div className="w-12 h-12 bg-fas-accent rounded-full flex items-center justify-center flex-shrink-0">
+                    <Mail size={20} className="text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-fas-navy mb-2">E-mail</h4>
+                    <p className="text-fas-text">
+                      contato@valencaesoares.com.br<br />
+                      escritorio@valencaesoares.com.br
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4" data-testid="contact-hours">
+                  <div className="w-12 h-12 bg-fas-accent rounded-full flex items-center justify-center flex-shrink-0">
+                    <Clock size={20} className="text-white" />
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-fas-navy mb-2">Horário de Atendimento</h4>
+                    <p className="text-fas-text">
+                      Segunda a Sexta: 9h às 18h<br />
+                      Sábado: 9h às 12h<br />
+                      Domingo: Fechado
+                    </p>
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center gap-4" data-testid="contact-whatsapp-info">
-                <MessageCircle className="text-accent-gold text-xl" size={24} />
-                <div>
-                  <div className="font-semibold">WhatsApp</div>
-                  <div className="text-blue-100">+55 11 99588-8564</div>
-                </div>
-              </div>
-              <div className="flex items-start gap-4" data-testid="contact-hours-info">
-                <Clock className="text-accent-gold text-xl mt-1" size={24} />
-                <div>
-                  <div className="font-semibold">Horário de Atendimento</div>
-                  <div className="text-blue-100">Segunda a Sexta: 9h às 18h</div>
-                  <div className="text-blue-100">Suporte Jurídico On-line</div>
+
+              <div className="mt-8 pt-8 border-t border-gray-200">
+                <h4 className="font-semibold text-fas-navy mb-4">Chat Online</h4>
+                <p className="text-fas-text text-sm mb-4">
+                  Converse conosco através do nosso assistente virtual disponível no canto inferior direito da tela.
+                </p>
+                <div className="flex items-center gap-2 text-fas-accent">
+                  <MessageCircle size={18} />
+                  <span className="text-sm font-medium">Chat disponível 24h</span>
                 </div>
               </div>
             </div>
           </div>
-          
-          <div data-testid="contact-form">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-4">
-                <Input
-                  type="text"
-                  placeholder="Nome"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
-                  required
-                  className="bg-fas-navy-light border-gray-500 text-white placeholder-gray-300"
-                  data-testid="input-name"
-                />
-                <Input
-                  type="email"
-                  placeholder="Email"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  required
-                  className="bg-fas-navy-light border-gray-500 text-white placeholder-gray-300"
-                  data-testid="input-email"
-                />
-              </div>
-              <Input
-                type="tel"
-                placeholder="Telefone"
-                value={formData.phone}
-                onChange={(e) => handleInputChange("phone", e.target.value)}
-                className="bg-fas-navy-light border-gray-500 text-white placeholder-gray-300"
-                data-testid="input-phone"
-              />
-              <Select value={formData.area} onValueChange={(value) => handleInputChange("area", value)}>
-                <SelectTrigger
-                  className="bg-fas-navy-light border-gray-500 text-white"
-                  data-testid="select-area"
+
+          {/* Contact Form */}
+          <div className="lg:col-span-2">
+            <div className="bg-white border border-gray-200 p-8 rounded-sm shadow-sm">
+              <h3 className="text-2xl font-semibold text-fas-navy mb-8">Envie sua Mensagem</h3>
+              
+              <form onSubmit={handleSubmit} className="space-y-6" data-testid="contact-form">
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="name" className="block text-sm font-medium text-fas-navy mb-2">
+                      Nome Completo *
+                    </label>
+                    <Input
+                      id="name"
+                      type="text"
+                      value={formData.name}
+                      onChange={(e) => handleInputChange("name", e.target.value)}
+                      required
+                      className="border-gray-300 focus:border-fas-accent"
+                      data-testid="input-name"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-fas-navy mb-2">
+                      E-mail *
+                    </label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange("email", e.target.value)}
+                      required
+                      className="border-gray-300 focus:border-fas-accent"
+                      data-testid="input-email"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-fas-navy mb-2">
+                      Telefone
+                    </label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      className="border-gray-300 focus:border-fas-accent"
+                      data-testid="input-phone"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="area" className="block text-sm font-medium text-fas-navy mb-2">
+                      Área de Interesse *
+                    </label>
+                    <Select value={formData.area} onValueChange={(value) => handleInputChange("area", value)}>
+                      <SelectTrigger className="border-gray-300 focus:border-fas-accent" data-testid="select-area">
+                        <SelectValue placeholder="Selecione uma área" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {practiceAreas.map((area) => (
+                          <SelectItem key={area} value={area}>
+                            {area}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium text-fas-navy mb-2">
+                    Mensagem *
+                  </label>
+                  <Textarea
+                    id="message"
+                    value={formData.message}
+                    onChange={(e) => handleInputChange("message", e.target.value)}
+                    required
+                    rows={5}
+                    className="border-gray-300 focus:border-fas-accent resize-none"
+                    placeholder="Descreva sua necessidade jurídica ou dúvida..."
+                    data-testid="textarea-message"
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={sendMessage.isPending}
+                  className="w-full bg-fas-accent hover:bg-fas-navy text-white font-medium py-3 transition-colors"
+                  data-testid="button-submit"
                 >
-                  <SelectValue placeholder="Selecione a área de interesse" />
-                </SelectTrigger>
-                <SelectContent>
-                  {practiceAreas.map((area) => (
-                    <SelectItem key={area} value={area} data-testid={`select-option-${area.toLowerCase().replace(/\s+/g, '-')}`}>
-                      {area}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <Textarea
-                placeholder="Descreva sua situação..."
-                rows={4}
-                value={formData.message}
-                onChange={(e) => handleInputChange("message", e.target.value)}
-                required
-                className="bg-fas-navy-light border-gray-500 text-white placeholder-gray-300"
-                data-testid="textarea-message"
-              />
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full btn-secondary"
-                data-testid="button-submit-contact"
-              >
-                {isSubmitting ? "Enviando..." : "Enviar Mensagem"}
-              </Button>
-            </form>
+                  {sendMessage.isPending ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Enviando...
+                    </>
+                  ) : (
+                    <>
+                      <Mail className="w-4 h-4 mr-2" />
+                      Enviar Mensagem
+                    </>
+                  )}
+                </Button>
+              </form>
+            </div>
           </div>
         </div>
       </div>

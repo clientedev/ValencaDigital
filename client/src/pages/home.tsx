@@ -3,6 +3,7 @@ import Footer from "@/components/layout/footer";
 import HeroSection from "@/components/hero-section";
 import AboutSection from "@/components/about-section";
 import ContactSection from "@/components/contact-section";
+import Chatbot from "@/components/chatbot";
 import PracticeAreaCard from "@/components/practice-areas/practice-area-card";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
@@ -159,6 +160,7 @@ export default function Home() {
 
       <ContactSection />
       <Footer />
+      <Chatbot />
     </div>
   );
 }
