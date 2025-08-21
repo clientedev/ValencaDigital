@@ -222,7 +222,7 @@
       width: 0;
     }
     to {
-      width: 4rem;
+      width: 5rem;
     }
   }
 
@@ -237,10 +237,10 @@
 
   @keyframes subtle-pulse {
     0%, 100% {
-      opacity: 0.05;
+      opacity: 0.03;
     }
     50% {
-      opacity: 0.08;
+      opacity: 0.06;
     }
   }
 
