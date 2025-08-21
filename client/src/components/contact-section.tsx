@@ -72,13 +72,13 @@ export default function ContactSection() {
   };
 
   return (
-    <section id="contact" className="py-20 bg-navy text-white" data-testid="contact-section">
+    <section id="contact" className="py-20 gradient-fas text-white" data-testid="contact-section">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-4xl font-bold mb-6" data-testid="contact-title">
             Fale Conosco
           </h2>
-          <div className="w-24 h-1 bg-accent-gold mx-auto mb-8"></div>
+          <div className="w-24 h-1 bg-fas-accent mx-auto mb-8"></div>
           <p className="text-xl text-blue-100">Entre em contato para uma consulta personalizada</p>
         </div>
         
@@ -120,7 +120,7 @@ export default function ContactSection() {
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
                   required
-                  className="bg-navy-light border-gray-500 text-white placeholder-gray-300"
+                  className="bg-fas-navy-light border-gray-500 text-white placeholder-gray-300"
                   data-testid="input-name"
                 />
                 <Input
@@ -129,7 +129,7 @@ export default function ContactSection() {
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
                   required
-                  className="bg-navy-light border-gray-500 text-white placeholder-gray-300"
+                  className="bg-fas-navy-light border-gray-500 text-white placeholder-gray-300"
                   data-testid="input-email"
                 />
               </div>
@@ -138,12 +138,12 @@ export default function ContactSection() {
                 placeholder="Telefone"
                 value={formData.phone}
                 onChange={(e) => handleInputChange("phone", e.target.value)}
-                className="bg-navy-light border-gray-500 text-white placeholder-gray-300"
+                className="bg-fas-navy-light border-gray-500 text-white placeholder-gray-300"
                 data-testid="input-phone"
               />
               <Select value={formData.area} onValueChange={(value) => handleInputChange("area", value)}>
                 <SelectTrigger
-                  className="bg-navy-light border-gray-500 text-white"
+                  className="bg-fas-navy-light border-gray-500 text-white"
                   data-testid="select-area"
                 >
                   <SelectValue placeholder="Selecione a área de interesse" />
@@ -162,7 +162,7 @@ export default function ContactSection() {
                 value={formData.message}
                 onChange={(e) => handleInputChange("message", e.target.value)}
                 required
-                className="bg-navy-light border-gray-500 text-white placeholder-gray-300"
+                className="bg-fas-navy-light border-gray-500 text-white placeholder-gray-300"
                 data-testid="textarea-message"
               />
               <Button

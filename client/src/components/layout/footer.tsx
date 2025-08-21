@@ -51,12 +51,12 @@ export default function Footer() {
 
   return (
     <>
-      <footer className="bg-gray-900 text-white py-12" data-testid="footer">
+      <footer className="bg-fas-navy text-white py-16" data-testid="footer">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-12">
             <div data-testid="footer-company-info">
-              <h3 className="text-xl font-bold mb-4">Valença & Soares</h3>
-              <p className="text-gray-300 mb-4">
+              <h3 className="text-2xl font-bold mb-4">Valença & Soares</h3>
+              <p className="text-blue-100 mb-6 leading-relaxed">
                 Advogados Associados desde 1996, oferecendo excelência em serviços jurídicos.
               </p>
               <div className="flex space-x-4">

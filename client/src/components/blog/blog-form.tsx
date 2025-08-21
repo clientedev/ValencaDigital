@@ -100,7 +100,7 @@ export default function BlogForm({ post, onSubmit, onCancel }: BlogFormProps) {
           <Label htmlFor="imageUrl">URL da Imagem</Label>
           <Input
             id="imageUrl"
-            value={formData.imageUrl}
+            value={formData.imageUrl || ""}
             onChange={(e) => handleInputChange("imageUrl", e.target.value)}
             placeholder="https://..."
             data-testid="input-blog-image"

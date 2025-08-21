@@ -73,7 +73,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/blog/:id/like", async (req, res) => {
     try {
       const postId = req.params.id;
-      const sessionId = req.body.sessionId || req.session?.id || "anonymous";
+      const sessionId = req.body.sessionId || "anonymous";
 
       const existingLike = await storage.getBlogLike(postId, sessionId);
       if (existingLike) {
@@ -91,7 +91,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.delete("/api/blog/:id/like", async (req, res) => {
     try {
       const postId = req.params.id;
-      const sessionId = req.body.sessionId || req.session?.id || "anonymous";
+      const sessionId = req.body.sessionId || "anonymous";
 
       const deleted = await storage.deleteBlogLike(postId, sessionId);
       if (!deleted) {

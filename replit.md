@@ -4,9 +4,12 @@
 
 This is a full-stack web application for a Brazilian law firm (Valença & Soares Advogados Associados) built with React frontend and Express backend. The application serves as both a professional law firm website and a blog platform featuring legal articles. The site includes practice area showcases, contact forms, and a complete blog management system with like functionality.
 
+The design has been redesigned to be more faithful to the FAS Advogados aesthetic (fasadv.com.br), featuring a clean, sophisticated style with modern typography, subtle animations, and the "Pessoas Excelência Resultados" concept prominently displayed in the hero section.
+
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Design preference: Follow FAS Advogados style and aesthetic closely
 
 ## System Architecture
 

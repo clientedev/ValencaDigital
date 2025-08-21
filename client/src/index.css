@@ -52,14 +52,15 @@
   --tracking-normal: 0em;
   --spacing: 0.25rem;
   
-  /* Custom legal firm colors */
-  --navy: hsl(210 60% 16%);
-  --navy-light: hsl(210 45% 29%);
-  --navy-dark: hsl(210 65% 12%);
-  --professional-blue: hsl(217 91% 60%);
-  --accent-gold: hsl(43 96% 56%);
-  --warm-gray: hsl(215 16% 47%);
-  --light-gray: hsl(210 40% 98%);
+  /* FAS-inspired color palette */
+  --fas-navy: hsl(220 100% 4%);
+  --fas-navy-light: hsl(220 50% 15%);
+  --fas-blue: hsl(220 100% 25%);
+  --fas-accent: hsl(203 100% 50%);
+  --fas-gray: hsl(220 9% 46%);
+  --fas-light-gray: hsl(220 20% 95%);
+  --fas-text: hsl(220 15% 25%);
+  --fas-border: hsl(220 13% 91%);
 }
 
 .dark {
@@ -122,104 +123,91 @@
     @apply font-semibold;
   }
 
-  .text-navy {
-    color: var(--navy);
+  .text-fas-navy {
+    color: var(--fas-navy);
   }
 
-  .text-navy-light {
-    color: var(--navy-light);
+  .text-fas-blue {
+    color: var(--fas-blue);
   }
 
-  .text-navy-dark {
-    color: var(--navy-dark);
+  .text-fas-accent {
+    color: var(--fas-accent);
   }
 
-  .text-professional-blue {
-    color: var(--professional-blue);
+  .text-fas-gray {
+    color: var(--fas-gray);
   }
 
-  .text-accent-gold {
-    color: var(--accent-gold);
+  .text-fas-text {
+    color: var(--fas-text);
   }
 
-  .text-warm-gray {
-    color: var(--warm-gray);
+  .bg-fas-navy {
+    background-color: var(--fas-navy);
   }
 
-  .bg-navy {
-    background-color: var(--navy);
+  .bg-fas-navy-light {
+    background-color: var(--fas-navy-light);
   }
 
-  .bg-navy-light {
-    background-color: var(--navy-light);
+  .bg-fas-blue {
+    background-color: var(--fas-blue);
   }
 
-  .bg-navy-dark {
-    background-color: var(--navy-dark);
+  .bg-fas-accent {
+    background-color: var(--fas-accent);
   }
 
-  .bg-professional-blue {
-    background-color: var(--professional-blue);
+  .bg-fas-light-gray {
+    background-color: var(--fas-light-gray);
   }
 
-  .bg-accent-gold {
-    background-color: var(--accent-gold);
+  .border-fas-border {
+    border-color: var(--fas-border);
   }
 
-  .bg-light-gray {
-    background-color: var(--light-gray);
+  .hover\\:text-fas-accent:hover {
+    color: var(--fas-accent);
   }
 
-  .hover\\:text-professional-blue:hover {
-    color: var(--professional-blue);
-  }
-
-  .hover\\:bg-professional-blue:hover {
-    background-color: var(--professional-blue);
-  }
-
-  .hover\\:bg-accent-gold:hover {
-    background-color: var(--accent-gold);
-  }
-
-  .border-professional-blue {
-    border-color: var(--professional-blue);
-  }
-
-  .focus\\:ring-professional-blue:focus {
-    --tw-ring-color: var(--professional-blue);
-  }
-
-  .focus\\:ring-accent-gold:focus {
-    --tw-ring-color: var(--accent-gold);
+  .hover\\:bg-fas-accent:hover {
+    background-color: var(--fas-accent);
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-professional-blue hover:bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors;
+    @apply bg-fas-navy hover:bg-fas-blue text-white px-6 py-3 rounded-sm font-medium transition-all duration-300 hover:shadow-md;
   }
 
   .btn-secondary {
-    @apply bg-accent-gold hover:bg-yellow-500 text-navy px-8 py-3 rounded-lg font-semibold transition-colors;
+    @apply bg-fas-accent hover:bg-fas-blue text-white px-6 py-3 rounded-sm font-medium transition-all duration-300;
   }
 
   .btn-outline {
-    @apply border-2 border-white hover:bg-white hover:text-navy text-white px-8 py-3 rounded-lg font-semibold transition-colors;
+    @apply border border-solid hover:bg-fas-navy hover:text-white text-fas-navy px-6 py-3 rounded-sm font-medium transition-all duration-300;
+    border-color: var(--fas-navy);
   }
 
-  .gradient-navy {
-    background: linear-gradient(to bottom right, var(--navy), var(--navy-light));
+  .gradient-fas {
+    background: linear-gradient(135deg, var(--fas-navy) 0%, var(--fas-blue) 100%);
   }
 
   .card-hover {
-    @apply transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1;
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5;
   }
 
-  .text-gradient {
-    background: linear-gradient(to right, var(--professional-blue), var(--navy));
+  .text-gradient-fas {
+    background: linear-gradient(135deg, var(--fas-accent), var(--fas-navy));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+  }
+
+  .wave-bg {
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='40' viewBox='0 0 100 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 40c20-10 40-10 60 0 20 10 40 10 60 0V0H0z' fill='%23f8fafc' opacity='0.3'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-position: bottom;
   }
 }

@@ -162,6 +162,7 @@ export class MemStorage implements IStorage {
       ...insertPost,
       id,
       likes: 0,
+      imageUrl: insertPost.imageUrl || null,
       createdAt: now,
       updatedAt: now,
     };
