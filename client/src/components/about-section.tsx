@@ -1,3 +1,5 @@
+import advogadoImg from "@assets/adv_1755784864631.jpg";
+
 export default function AboutSection() {
   return (
     <section id="about" className="py-20 bg-fas-light-gray" data-testid="about-section">
@@ -12,8 +14,8 @@ export default function AboutSection() {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div data-testid="about-image">
             <img
-              src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600"
-              alt="Biblioteca jurídica moderna"
+              src={advogadoImg}
+              alt="Dr. Valença - Sócio fundador do escritório"
               className="rounded-xl shadow-lg"
             />
           </div>
