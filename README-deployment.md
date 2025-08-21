@@ -23,7 +23,7 @@ node build.js
 
 2. **Configurações do projeto**
    - Framework Preset: **Other**
-   - Build Command: `npm run vercel-build`
+   - Build Command: `cd client && npm run build`
    - Output Directory: `client/dist`
    - Install Command: `npm install`
 
